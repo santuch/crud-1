@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/students")
+@CrossOrigin(origins = "http://localhost:3000") // Allow CORS from localhost:3000
 public class StudentController {
 
     @Autowired
@@ -34,8 +35,13 @@ public class StudentController {
     // Create a new student
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student savedStudent = studentRepository.save(student);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
+        try {
+            Student savedStudent = studentRepository.save(student);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     // Update an existing student
@@ -44,16 +50,16 @@ public class StudentController {
         return studentRepository.findById(id).map(student -> {
             student.setUserName(studentDetails.getUserName());
             student.setType(studentDetails.getType());
-            student.setDisplayNameEn(studentDetails.getDisplayNameEn()); 
-            student.setDisplayNameTh(studentDetails.getDisplayNameTh()); 
+            student.setDisplayNameEn(studentDetails.getDisplayNameEn());
+            student.setDisplayNameTh(studentDetails.getDisplayNameTh());
             student.setEmail(studentDetails.getEmail());
             student.setFaculty(studentDetails.getFaculty());
-            student.setDepartment(studentDetails.getDepartment()); 
-            student.setTuStatus(studentDetails.getTuStatus()); 
-            student.setStatusWork(studentDetails.getStatusWork()); 
-            student.setStatusEmp(studentDetails.getStatusEmp()); 
-            studentRepository.save(student);
-            return ResponseEntity.ok(student);
+            student.setDepartment(studentDetails.getDepartment());
+            student.setTuStatus(studentDetails.getTuStatus());
+            student.setStatusWork(studentDetails.getStatusWork());
+            student.setStatusEmp(studentDetails.getStatusEmp());
+            Student updatedStudent = studentRepository.save(student);
+            return ResponseEntity.ok(updatedStudent);
         }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
@@ -70,7 +76,13 @@ public class StudentController {
     // Save user data from TU API
     @PostMapping("/saveUser")
     public ResponseEntity<Student> saveUserData(@RequestBody Student userData) {
-        Student savedStudent = studentRepository.save(userData);
-        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
+        try {
+            System.out.println("Received user data: " + userData);
+            Student savedStudent = studentRepository.save(userData);
+            return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
