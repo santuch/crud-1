@@ -44,9 +44,14 @@ public class StudentController {
         return studentRepository.findById(id).map(student -> {
             student.setUserName(studentDetails.getUserName());
             student.setType(studentDetails.getType());
-            student.setEngName(studentDetails.getEngName());
+            student.setDisplayNameEn(studentDetails.getDisplayNameEn()); 
+            student.setDisplayNameTh(studentDetails.getDisplayNameTh()); 
             student.setEmail(studentDetails.getEmail());
             student.setFaculty(studentDetails.getFaculty());
+            student.setDepartment(studentDetails.getDepartment()); 
+            student.setTuStatus(studentDetails.getTuStatus()); 
+            student.setStatusWork(studentDetails.getStatusWork()); 
+            student.setStatusEmp(studentDetails.getStatusEmp()); 
             studentRepository.save(student);
             return ResponseEntity.ok(student);
         }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
@@ -60,5 +65,12 @@ public class StudentController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    // Save user data from TU API
+    @PostMapping("/saveUser")
+    public ResponseEntity<Student> saveUserData(@RequestBody Student userData) {
+        Student savedStudent = studentRepository.save(userData);
+        return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 }

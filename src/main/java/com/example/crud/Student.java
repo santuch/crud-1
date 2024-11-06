@@ -20,15 +20,31 @@ public class Student {
     @Column(nullable = false)
     private String type; // Possible values: "student" or "employee"
 
-    @Column(nullable = false)
-    private String engName;
+    @Column(name = "display_name_th", columnDefinition = "NVARCHAR(255)")
+    private String displayNameTh;
+    
+    @Column(name = "display_name_en", columnDefinition = "NVARCHAR(255)")
+    private String displayNameEn;
 
     @Column(nullable = false, unique = true)
     private String email;
-
+    
+    @Column(columnDefinition = "NVARCHAR(255)")
+    private String department;
+    
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String faculty;
 
-    // Getters and setters
+    @Column(name = "tu_status")
+    private String tuStatus;
+
+    @Column(name = "status_work")
+    private String statusWork;
+
+    @Column(name = "status_emp")
+    private String statusEmp;
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -53,12 +69,20 @@ public class Student {
         this.type = type;
     }
 
-    public String getEngName() {
-        return engName;
+    public String getDisplayNameTh() {
+        return displayNameTh;
     }
 
-    public void setEngName(String engName) {
-        this.engName = engName;
+    public void setDisplayNameTh(String displayNameTh) {
+        this.displayNameTh = displayNameTh;
+    }
+
+    public String getDisplayNameEn() {
+        return displayNameEn;
+    }
+
+    public void setDisplayNameEn(String displayNameEn) {
+        this.displayNameEn = displayNameEn;
     }
 
     public String getEmail() {
@@ -75,5 +99,37 @@ public class Student {
 
     public void setFaculty(String faculty) {
         this.faculty = faculty;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getTuStatus() {
+        return tuStatus;
+    }
+
+    public void setTuStatus(String tuStatus) {
+        this.tuStatus = tuStatus;
+    }
+
+    public String getStatusWork() {
+        return statusWork;
+    }
+
+    public void setStatusWork(String statusWork) {
+        this.statusWork = statusWork;
+    }
+
+    public String getStatusEmp() {
+        return statusEmp;
+    }
+
+    public void setStatusEmp(String statusEmp) {
+        this.statusEmp = statusEmp;
     }
 }
